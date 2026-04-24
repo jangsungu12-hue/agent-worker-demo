@@ -152,6 +152,13 @@ button:hover {
   box-shadow: 0 12px 24px rgba(138, 61, 24, 0.24);
 }
 
+button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+  box-shadow: none;
+}
+
 .secondary-button {
   width: auto;
   white-space: nowrap;

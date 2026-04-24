@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사칙연산 계산기</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="calculator">
+    <section class="panel">
+      <p class="eyebrow">Arithmetic Calculator</p>
+      <h1>사칙연산 계산기</h1>
+      <p class="description">두 숫자를 입력하고 연산을 선택하면 즉시 결과를 확인할 수 있습니다.</p>
+
+      <form id="calculator-form" class="calculator-form">
+        <label class="field">
+          <span>첫 번째 숫자</span>
+          <input id="first-number" name="firstNumber" type="number" step="any" placeholder="예: 12">
+        </label>
+
+        <label class="field">
+          <span>연산</span>
+          <select id="operator" name="operator">
+            <option value="+">더하기 (+)</option>
+            <option value="-">빼기 (-)</option>
+            <option value="*">곱하기 (×)</option>
+            <option value="/">나누기 (÷)</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>두 번째 숫자</span>
+          <input id="second-number" name="secondNumber" type="number" step="any" placeholder="예: 3">
+        </label>
+
+        <button type="submit">계산하기</button>
+      </form>
+
+      <section class="result-box" aria-live="polite">
+        <p class="result-label">결과</p>
+        <p id="result" class="result-value">값을 입력해 주세요.</p>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

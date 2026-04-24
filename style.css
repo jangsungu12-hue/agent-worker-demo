@@ -1,0 +1,136 @@
+:root {
+  --bg: #f4efe7;
+  --panel: rgba(255, 252, 247, 0.92);
+  --line: #d7c9b6;
+  --text: #1f1a17;
+  --muted: #6b6258;
+  --accent: #bf5b2c;
+  --accent-dark: #8a3d18;
+  --shadow: 0 24px 60px rgba(78, 55, 34, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(191, 91, 44, 0.18), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(102, 141, 95, 0.2), transparent 30%),
+    linear-gradient(135deg, #efe3d2, var(--bg));
+}
+
+.calculator {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.panel {
+  width: min(100%, 480px);
+  padding: 32px;
+  border: 1px solid rgba(215, 201, 182, 0.8);
+  border-radius: 28px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+}
+
+.description {
+  margin: 12px 0 28px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.calculator-form {
+  display: grid;
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field span,
+.result-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  border-radius: 16px;
+  font: inherit;
+}
+
+input,
+select {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid rgba(191, 91, 44, 0.25);
+  border-color: var(--accent);
+}
+
+button {
+  padding: 15px 18px;
+  border: 0;
+  font-weight: 700;
+  color: #fffaf4;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(138, 61, 24, 0.24);
+}
+
+.result-box {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(250, 244, 236, 0.95);
+  border: 1px solid rgba(215, 201, 182, 0.7);
+}
+
+.result-value {
+  margin: 10px 0 0;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 800;
+  word-break: break-word;
+}
+
+@media (max-width: 520px) {
+  .panel {
+    padding: 24px 20px;
+    border-radius: 22px;
+  }
+}

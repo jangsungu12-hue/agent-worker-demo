@@ -33,7 +33,7 @@ def main() -> None:
     print("사칙연산 계산기")
 
     first_number = parse_number("첫 번째 숫자: ")
-    operator = input("연산자 (+, -, *, /): ").strip()
+    operator = input("연산자(+, -, *, /): ").strip()
     second_number = parse_number("두 번째 숫자: ")
 
     result = calculate(first_number, second_number, operator)

@@ -1,3 +1,11 @@
+const appShell = document.querySelector(".app-shell");
+const loginScreen = document.querySelector("#login-screen");
+const calculatorScreen = document.querySelector("#calculator-screen");
+const loginForm = document.querySelector("#login-form");
+const usernameInput = document.querySelector("#username");
+const passwordInput = document.querySelector("#password");
+const loginErrorEl = document.querySelector("#login-error");
+const logoutButton = document.querySelector("#logout-button");
 const expressionEl = document.querySelector("#expression");
 const resultEl = document.querySelector("#result");
 const keypad = document.querySelector(".keypad");
@@ -14,6 +22,27 @@ let tokens = [];
 let currentNumber = "";
 let resultShown = false;
 let lastResult = "";
+let isLoggedIn = false;
+
+function showCalculator() {
+  isLoggedIn = true;
+  loginScreen.hidden = true;
+  calculatorScreen.hidden = false;
+  appShell.setAttribute("aria-labelledby", "app-title");
+  clearAll();
+  keypad.querySelector("button").focus();
+}
+
+function showLogin() {
+  isLoggedIn = false;
+  calculatorScreen.hidden = true;
+  loginScreen.hidden = false;
+  appShell.setAttribute("aria-labelledby", "login-title");
+  loginForm.reset();
+  loginErrorEl.textContent = "";
+  clearAll();
+  usernameInput.focus();
+}
 
 function render() {
   const expression = [...tokens, currentNumber].join(" ");
@@ -210,7 +239,33 @@ function calculate() {
   resultShown = true;
 }
 
+loginForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if (!username || !password) {
+    loginErrorEl.textContent = "아이디와 비밀번호를 모두 입력하세요.";
+    (username ? passwordInput : usernameInput).focus();
+    return;
+  }
+
+  loginErrorEl.textContent = "";
+  showCalculator();
+});
+
+loginForm.addEventListener("input", () => {
+  loginErrorEl.textContent = "";
+});
+
+logoutButton.addEventListener("click", showLogin);
+
 keypad.addEventListener("click", (event) => {
+  if (!isLoggedIn) {
+    return;
+  }
+
   const button = event.target.closest("button");
 
   if (!button) {
@@ -226,6 +281,10 @@ keypad.addEventListener("click", (event) => {
 });
 
 window.addEventListener("keydown", (event) => {
+  if (!isLoggedIn) {
+    return;
+  }
+
   const { key } = event;
 
   if (/^\d$/.test(key)) appendNumber(key);
@@ -237,3 +296,4 @@ window.addEventListener("keydown", (event) => {
 });
 
 render();
+usernameInput.focus();

@@ -3,47 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>사칙연산 계산기</title>
+  <title>로그인</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app-shell">
-    <section class="calculator" aria-label="사칙연산 계산기">
-      <header class="calculator-header">
-        <p class="eyebrow">Four Operations</p>
-        <h1>사칙연산 계산기</h1>
+    <section class="login-panel" aria-labelledby="login-title">
+      <header class="login-header">
+        <p class="eyebrow">Secure Access</p>
+        <h1 id="login-title">로그인</h1>
+        <p class="subtitle">다시 만나서 반가워요.</p>
       </header>
 
-      <section class="display" aria-live="polite">
-        <p id="expression" class="expression">&nbsp;</p>
-        <output id="display-value" class="display-value">0</output>
-      </section>
+      <form id="login-form" class="login-form" novalidate>
+        <div class="field">
+          <label for="email">이메일</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="username"
+            placeholder="name@example.com"
+            aria-describedby="email-error"
+            required
+          >
+          <p id="email-error" class="field-error" aria-live="polite"></p>
+        </div>
 
-      <div class="keypad" aria-label="계산기 키패드">
-        <button type="button" class="key key-muted" data-action="clear">AC</button>
-        <button type="button" class="key key-muted" data-action="delete" aria-label="마지막 숫자 삭제">Del</button>
-        <button type="button" class="key key-muted" data-action="sign" aria-label="부호 변경">+/-</button>
-        <button type="button" class="key key-operator" data-operator="/" aria-label="나누기">/</button>
+        <div class="field">
+          <label for="password">비밀번호</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            aria-describedby="password-error"
+            required
+          >
+          <p id="password-error" class="field-error" aria-live="polite"></p>
+        </div>
 
-        <button type="button" class="key" data-digit="7">7</button>
-        <button type="button" class="key" data-digit="8">8</button>
-        <button type="button" class="key" data-digit="9">9</button>
-        <button type="button" class="key key-operator" data-operator="*" aria-label="곱하기">x</button>
+        <div class="form-options">
+          <label class="checkbox-row">
+            <input id="remember" name="remember" type="checkbox">
+            <span>로그인 유지</span>
+          </label>
+        </div>
 
-        <button type="button" class="key" data-digit="4">4</button>
-        <button type="button" class="key" data-digit="5">5</button>
-        <button type="button" class="key" data-digit="6">6</button>
-        <button type="button" class="key key-operator" data-operator="-" aria-label="빼기">-</button>
-
-        <button type="button" class="key" data-digit="1">1</button>
-        <button type="button" class="key" data-digit="2">2</button>
-        <button type="button" class="key" data-digit="3">3</button>
-        <button type="button" class="key key-operator" data-operator="+" aria-label="더하기">+</button>
-
-        <button type="button" class="key key-wide" data-digit="0">0</button>
-        <button type="button" class="key" data-action="decimal" aria-label="소수점">.</button>
-        <button type="button" class="key key-equals" data-action="equals" aria-label="계산">=</button>
-      </div>
+        <button type="submit" class="submit-button">로그인</button>
+        <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+      </form>
     </section>
   </main>
 

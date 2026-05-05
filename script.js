@@ -1,176 +1,271 @@
-const authPanel = document.getElementById("auth-panel");
-const appPanel = document.getElementById("app-panel");
-const loginForm = document.getElementById("login-form");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const authMessage = document.getElementById("auth-message");
-const welcomeMessage = document.getElementById("welcome-message");
-const logoutButton = document.getElementById("logout-button");
-const loginButton = loginForm.querySelector('button[type="submit"]');
+const displayValueElement = document.getElementById("display-value");
+const expressionElement = document.getElementById("expression");
+const keypad = document.querySelector(".keypad");
 
-const calculatorForm = document.getElementById("calculator-form");
-const firstNumberInput = document.getElementById("first-number");
-const secondNumberInput = document.getElementById("second-number");
-const operatorSelect = document.getElementById("operator");
-const resultElement = document.getElementById("result");
+const operatorLabels = {
+  "+": "+",
+  "-": "-",
+  "*": "x",
+  "/": "/",
+};
 
-let currentUser = null;
+let displayValue = "0";
+let storedValue = null;
+let pendingOperator = null;
+let waitingForOperand = false;
+let hasError = false;
 
-function formatResult(value) {
-  return Number.isInteger(value)
-    ? String(value)
-    : value.toLocaleString("en-US", { maximumFractionDigits: 10 });
-}
-
-function calculate(firstNumber, secondNumber, operator) {
-  switch (operator) {
-    case "+":
-      return firstNumber + secondNumber;
-    case "-":
-      return firstNumber - secondNumber;
-    case "*":
-      return firstNumber * secondNumber;
-    case "/":
-      if (secondNumber === 0) {
-        throw new Error("Cannot divide by zero.");
-      }
-      return firstNumber / secondNumber;
-    default:
-      throw new Error("Unsupported operator.");
-  }
-}
-
-function setAuthMessage(message) {
-  authMessage.textContent = message;
-}
-
-function setLoginPending(isPending) {
-  loginButton.disabled = isPending;
-  loginButton.textContent = isPending ? "Logging In..." : "Log In";
-}
-
-function renderAuthState() {
-  const isLoggedIn = Boolean(currentUser);
-
-  authPanel.classList.toggle("hidden", isLoggedIn);
-  appPanel.classList.toggle("hidden", !isLoggedIn);
-
-  if (isLoggedIn) {
-    welcomeMessage.textContent = `Signed in as ${currentUser.name}.`;
-    setAuthMessage("");
-    loginForm.reset();
-    emailInput.blur();
-    passwordInput.blur();
-    firstNumberInput.focus();
-    return;
+function formatNumber(value) {
+  if (!Number.isFinite(value)) {
+    return "Error";
   }
 
-  welcomeMessage.textContent = "";
-  resultElement.textContent = "Enter values to begin.";
-  emailInput.focus();
-}
-
-async function requestJson(url, options = {}) {
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers ?? {}),
-    },
-    ...options,
+  const rounded = Number.parseFloat(value.toPrecision(12));
+  const formatted = rounded.toLocaleString("en-US", {
+    maximumFractionDigits: 10,
   });
 
-  let payload = {};
-
-  try {
-    payload = await response.json();
-  } catch {
-    payload = {};
-  }
-
-  if (!response.ok) {
-    throw new Error(payload.message || "Request failed.");
-  }
-
-  return payload;
+  return formatted.length <= 14 ? formatted : rounded.toExponential(6);
 }
 
-async function restoreSession() {
-  try {
-    const payload = await requestJson("/api/session", { method: "GET" });
-    currentUser = payload.authenticated ? payload.user : null;
-  } catch {
-    currentUser = null;
-    setAuthMessage("Unable to load session.");
-  } finally {
-    renderAuthState();
+function parseDisplayValue() {
+  return Number(displayValue);
+}
+
+function updateDisplay() {
+  displayValueElement.textContent = hasError ? displayValue : formatNumber(parseDisplayValue());
+}
+
+function setExpression(text = "") {
+  expressionElement.textContent = text || "\u00a0";
+}
+
+function resetCalculator() {
+  displayValue = "0";
+  storedValue = null;
+  pendingOperator = null;
+  waitingForOperand = false;
+  hasError = false;
+  setExpression();
+  updateDisplay();
+}
+
+function setError(message) {
+  displayValue = message;
+  storedValue = null;
+  pendingOperator = null;
+  waitingForOperand = true;
+  hasError = true;
+  setExpression();
+  updateDisplay();
+}
+
+function inputDigit(digit) {
+  if (hasError) {
+    resetCalculator();
+  }
+
+  if (waitingForOperand) {
+    displayValue = digit;
+    waitingForOperand = false;
+    updateDisplay();
+    return;
+  }
+
+  displayValue = displayValue === "0" ? digit : `${displayValue}${digit}`;
+  updateDisplay();
+}
+
+function inputDecimal() {
+  if (hasError) {
+    resetCalculator();
+  }
+
+  if (waitingForOperand) {
+    displayValue = "0.";
+    waitingForOperand = false;
+    displayValueElement.textContent = displayValue;
+    return;
+  }
+
+  if (!displayValue.includes(".")) {
+    displayValue = `${displayValue}.`;
+  }
+
+  displayValueElement.textContent = displayValue;
+}
+
+function deleteDigit() {
+  if (hasError) {
+    resetCalculator();
+    return;
+  }
+
+  if (waitingForOperand) {
+    return;
+  }
+
+  displayValue = displayValue.length > 1 ? displayValue.slice(0, -1) : "0";
+  updateDisplay();
+}
+
+function toggleSign() {
+  if (hasError || displayValue === "0") {
+    return;
+  }
+
+  displayValue = displayValue.startsWith("-")
+    ? displayValue.slice(1)
+    : `-${displayValue}`;
+  updateDisplay();
+}
+
+function performCalculation(firstValue, secondValue, operator) {
+  switch (operator) {
+    case "+":
+      return firstValue + secondValue;
+    case "-":
+      return firstValue - secondValue;
+    case "*":
+      return firstValue * secondValue;
+    case "/":
+      if (secondValue === 0) {
+        throw new Error("Cannot divide by zero");
+      }
+      return firstValue / secondValue;
+    default:
+      throw new Error("Unsupported operation");
   }
 }
 
-loginForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
+function chooseOperator(nextOperator) {
+  if (hasError) {
+    resetCalculator();
+  }
 
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
+  const inputValue = parseDisplayValue();
 
-  if (!email || !password) {
-    setAuthMessage("Enter both email and password.");
+  if (pendingOperator && waitingForOperand) {
+    pendingOperator = nextOperator;
+    setExpression(`${formatNumber(storedValue)} ${operatorLabels[nextOperator]}`);
     return;
   }
 
-  setLoginPending(true);
-  setAuthMessage("");
+  if (storedValue === null) {
+    storedValue = inputValue;
+  } else if (pendingOperator) {
+    try {
+      storedValue = performCalculation(storedValue, inputValue, pendingOperator);
+    } catch (error) {
+      setError(error.message);
+      return;
+    }
+
+    displayValue = String(storedValue);
+    updateDisplay();
+  }
+
+  pendingOperator = nextOperator;
+  waitingForOperand = true;
+  setExpression(`${formatNumber(storedValue)} ${operatorLabels[nextOperator]}`);
+}
+
+function calculateResult() {
+  if (!pendingOperator || storedValue === null) {
+    return;
+  }
+
+  const inputValue = parseDisplayValue();
+  const expression = `${formatNumber(storedValue)} ${operatorLabels[pendingOperator]} ${formatNumber(inputValue)} =`;
 
   try {
-    const payload = await requestJson("/api/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-    currentUser = payload.user;
-    renderAuthState();
+    const result = performCalculation(storedValue, inputValue, pendingOperator);
+    displayValue = String(result);
+    storedValue = null;
+    pendingOperator = null;
+    waitingForOperand = true;
+    setExpression(expression);
+    updateDisplay();
   } catch (error) {
-    setAuthMessage(error.message);
-  } finally {
-    setLoginPending(false);
+    setError(error.message);
   }
-});
+}
 
-logoutButton.addEventListener("click", async () => {
-  logoutButton.disabled = true;
+function handleButtonPress(button) {
+  const { digit, operator, action } = button.dataset;
 
-  try {
-    await requestJson("/api/logout", { method: "POST", body: "{}" });
-  } catch {
-    // Clear client state even if the session has already expired server-side.
-  } finally {
-    currentUser = null;
-    logoutButton.disabled = false;
-    renderAuthState();
-  }
-});
-
-calculatorForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const firstNumber = Number(firstNumberInput.value);
-  const secondNumber = Number(secondNumberInput.value);
-  const operator = operatorSelect.value;
-
-  if (firstNumberInput.value === "" || secondNumberInput.value === "") {
-    resultElement.textContent = "Enter both numbers.";
+  if (digit !== undefined) {
+    inputDigit(digit);
     return;
   }
 
-  if (Number.isNaN(firstNumber) || Number.isNaN(secondNumber)) {
-    resultElement.textContent = "Enter valid numbers.";
+  if (operator) {
+    chooseOperator(operator);
     return;
   }
 
-  try {
-    const result = calculate(firstNumber, secondNumber, operator);
-    resultElement.textContent = formatResult(result);
-  } catch (error) {
-    resultElement.textContent = error.message;
+  switch (action) {
+    case "clear":
+      resetCalculator();
+      break;
+    case "delete":
+      deleteDigit();
+      break;
+    case "decimal":
+      inputDecimal();
+      break;
+    case "sign":
+      toggleSign();
+      break;
+    case "equals":
+      calculateResult();
+      break;
+    default:
+      break;
+  }
+}
+
+keypad.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+
+  if (!button) {
+    return;
+  }
+
+  handleButtonPress(button);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (/^\d$/.test(event.key)) {
+    inputDigit(event.key);
+    return;
+  }
+
+  if (event.key === ".") {
+    inputDecimal();
+    return;
+  }
+
+  if (["+", "-", "*", "/"].includes(event.key)) {
+    event.preventDefault();
+    chooseOperator(event.key);
+    return;
+  }
+
+  if (event.key === "Enter" || event.key === "=") {
+    event.preventDefault();
+    calculateResult();
+    return;
+  }
+
+  if (event.key === "Backspace") {
+    deleteDigit();
+    return;
+  }
+
+  if (event.key === "Escape") {
+    resetCalculator();
   }
 });
 
-restoreSession();
+resetCalculator();

@@ -1,11 +1,16 @@
 :root {
-  --bg: #f6f2ea;
+  --bg: #eef3f7;
   --surface: #ffffff;
-  --text: #1f2933;
-  --muted: #64748b;
-  --accent: #0f766e;
-  --accent-soft: #d9f0ec;
-  --shadow: 0 22px 56px rgba(31, 41, 51, 0.14);
+  --surface-muted: #f6f8fb;
+  --text: #111827;
+  --muted: #637083;
+  --line: #d9e2ec;
+  --accent: #2563eb;
+  --accent-dark: #1d4ed8;
+  --operator: #0f766e;
+  --operator-dark: #115e59;
+  --danger: #b91c1c;
+  --shadow: 0 24px 64px rgba(17, 24, 39, 0.16);
 }
 
 * {
@@ -18,8 +23,12 @@ body {
   font-family: "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
   color: var(--text);
   background:
-    linear-gradient(135deg, rgba(15, 118, 110, 0.12), rgba(255, 255, 255, 0) 46%),
+    linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 118, 110, 0.09)),
     var(--bg);
+}
+
+button {
+  font: inherit;
 }
 
 .app-shell {
@@ -29,24 +38,23 @@ body {
   padding: 24px;
 }
 
-.greeting-panel {
-  width: min(100%, 560px);
-  padding: 48px;
-  border: 1px solid rgba(15, 118, 110, 0.14);
+.calculator {
+  width: min(100%, 420px);
+  padding: 24px;
+  border: 1px solid rgba(17, 24, 39, 0.08);
   border-radius: 8px;
   background: var(--surface);
   box-shadow: var(--shadow);
-  text-align: center;
+}
+
+.calculator-header {
+  margin-bottom: 18px;
 }
 
 .eyebrow {
-  display: inline-flex;
-  margin: 0 0 14px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-size: 0.78rem;
+  margin: 0 0 6px;
+  color: var(--operator);
+  font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -54,27 +62,134 @@ body {
 
 h1 {
   margin: 0;
-  font-size: 5rem;
-  line-height: 1.05;
+  font-size: 1.85rem;
+  line-height: 1.15;
 }
 
-.subtitle {
-  margin: 18px 0 0;
+.display {
+  display: grid;
+  min-height: 154px;
+  align-content: center;
+  gap: 7px;
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-muted);
+}
+
+.display-label {
   color: var(--muted);
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
-@media (max-width: 480px) {
+.expression,
+.result {
+  display: block;
+  min-height: 34px;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.expression {
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.35;
+}
+
+.result {
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.result.error {
+  color: var(--danger);
+  font-size: 1.2rem;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.key {
+  display: grid;
+  min-height: 58px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1.18rem;
+  font-weight: 800;
+  line-height: 1;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    transform 140ms ease;
+}
+
+.key:hover {
+  border-color: #b8c6d6;
+  background: #f8fafc;
+}
+
+.key:active {
+  transform: translateY(1px);
+}
+
+.key-secondary {
+  background: #edf2f7;
+  color: #334155;
+}
+
+.key-operator {
+  border-color: transparent;
+  background: var(--operator);
+  color: #ffffff;
+}
+
+.key-operator:hover {
+  background: var(--operator-dark);
+}
+
+.key-equals {
+  grid-column: span 2;
+  border-color: transparent;
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.key-equals:hover {
+  background: var(--accent-dark);
+}
+
+.key-zero {
+  grid-column: span 2;
+}
+
+@media (max-width: 440px) {
   .app-shell {
-    padding: 16px;
+    padding: 14px;
   }
 
-  .greeting-panel {
-    padding: 36px 22px;
+  .calculator {
+    padding: 18px;
   }
 
-  h1 {
-    font-size: 3rem;
+  .key {
+    min-height: 54px;
+  }
+
+  .result {
+    font-size: 1.7rem;
   }
 }

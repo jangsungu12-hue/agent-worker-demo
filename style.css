@@ -1,19 +1,19 @@
 :root {
-  --bg: #eef2f5;
-  --surface: #ffffff;
-  --surface-muted: #f7f9fb;
-  --line: #d8e0e7;
-  --line-strong: #aebbc7;
-  --text: #151a1f;
-  --muted: #66727e;
-  --accent: #08786f;
-  --accent-dark: #055c55;
-  --accent-soft: #e6f3f1;
-  --danger: #a43d2b;
-  --danger-soft: #f9ebe8;
-  --success: #0c6b48;
-  --success-soft: #e6f4ed;
-  --shadow: 0 18px 44px rgba(21, 26, 31, 0.14);
+  --bg: #081018;
+  --surface: #101923;
+  --surface-muted: #162232;
+  --line: #2b3948;
+  --line-strong: #54677c;
+  --text: #f4f7fb;
+  --muted: #aab6c4;
+  --accent: #21b7a9;
+  --accent-dark: #16968b;
+  --accent-soft: rgba(33, 183, 169, 0.14);
+  --danger: #ff9a83;
+  --danger-soft: rgba(255, 154, 131, 0.12);
+  --success: #7ee2a8;
+  --success-soft: rgba(126, 226, 168, 0.12);
+  --shadow: 0 22px 52px rgba(0, 0, 0, 0.38);
 }
 
 * {
@@ -26,7 +26,7 @@ body {
   font-family: "Segoe UI", Arial, sans-serif;
   color: var(--text);
   background:
-    linear-gradient(135deg, rgba(8, 120, 111, 0.12), rgba(164, 61, 43, 0.08)),
+    linear-gradient(145deg, rgba(33, 183, 169, 0.16), rgba(255, 154, 131, 0.08) 42%, rgba(8, 16, 24, 0.94)),
     var(--bg);
 }
 
@@ -104,17 +104,21 @@ input[type="password"] {
   transition: background-color 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
 }
 
+input::placeholder {
+  color: #78889a;
+}
+
 input[type="email"]:hover,
 input[type="password"]:hover {
   border-color: var(--line-strong);
-  background: #ffffff;
+  background: #1b2a3b;
 }
 
 input[type="email"]:focus,
 input[type="password"]:focus {
   border-color: var(--accent);
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(8, 120, 111, 0.16);
+  background: #1b2a3b;
+  box-shadow: 0 0 0 3px rgba(33, 183, 169, 0.22);
   outline: none;
 }
 
@@ -188,7 +192,7 @@ input[aria-invalid="true"] {
 
 .form-message.is-success {
   padding: 10px 12px;
-  border: 1px solid rgba(12, 107, 72, 0.18);
+  border: 1px solid rgba(126, 226, 168, 0.22);
   border-radius: 8px;
   background: var(--success-soft);
   color: var(--success);

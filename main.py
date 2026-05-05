@@ -1,4 +1,4 @@
-"""Serve the arithmetic calculator app."""
+"""Serve the login screen app."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ STATIC_DIR = Path(__file__).resolve().parent
 
 
 class AppHandler(SimpleHTTPRequestHandler):
-    """Serve static files for the calculator."""
+    """Serve static files for the login screen."""
 
     def do_GET(self) -> None:  # noqa: N802
         if self.path == "/":
@@ -24,7 +24,7 @@ class AppHandler(SimpleHTTPRequestHandler):
 def main() -> None:
     handler = partial(AppHandler, directory=str(STATIC_DIR))
     server = ThreadingHTTPServer((HOST, PORT), handler)
-    print(f"Serving calculator at http://{HOST}:{PORT}")
+    print(f"Serving login screen at http://{HOST}:{PORT}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

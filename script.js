@@ -1,271 +1,95 @@
-const displayValueElement = document.getElementById("display-value");
-const expressionElement = document.getElementById("expression");
-const keypad = document.querySelector(".keypad");
+const form = document.getElementById("login-form");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const rememberInput = document.getElementById("remember");
+const emailError = document.getElementById("email-error");
+const passwordError = document.getElementById("password-error");
+const formMessage = document.getElementById("form-message");
 
-const operatorLabels = {
-  "+": "+",
-  "-": "-",
-  "*": "x",
-  "/": "/",
-};
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-let displayValue = "0";
-let storedValue = null;
-let pendingOperator = null;
-let waitingForOperand = false;
-let hasError = false;
-
-function formatNumber(value) {
-  if (!Number.isFinite(value)) {
-    return "Error";
-  }
-
-  const rounded = Number.parseFloat(value.toPrecision(12));
-  const formatted = rounded.toLocaleString("en-US", {
-    maximumFractionDigits: 10,
-  });
-
-  return formatted.length <= 14 ? formatted : rounded.toExponential(6);
+function setFieldError(input, errorElement, message) {
+  input.setAttribute("aria-invalid", "true");
+  errorElement.textContent = message;
 }
 
-function parseDisplayValue() {
-  return Number(displayValue);
+function clearFieldError(input, errorElement) {
+  input.removeAttribute("aria-invalid");
+  errorElement.textContent = "";
 }
 
-function updateDisplay() {
-  displayValueElement.textContent = hasError ? displayValue : formatNumber(parseDisplayValue());
+function validateEmail() {
+  const email = emailInput.value.trim();
+
+  if (!email) {
+    setFieldError(emailInput, emailError, "이메일을 입력해 주세요.");
+    return false;
+  }
+
+  if (!emailPattern.test(email)) {
+    setFieldError(emailInput, emailError, "올바른 이메일 형식이 아닙니다.");
+    return false;
+  }
+
+  clearFieldError(emailInput, emailError);
+  return true;
 }
 
-function setExpression(text = "") {
-  expressionElement.textContent = text || "\u00a0";
+function validatePassword() {
+  if (!passwordInput.value) {
+    setFieldError(passwordInput, passwordError, "비밀번호를 입력해 주세요.");
+    return false;
+  }
+
+  clearFieldError(passwordInput, passwordError);
+  return true;
 }
 
-function resetCalculator() {
-  displayValue = "0";
-  storedValue = null;
-  pendingOperator = null;
-  waitingForOperand = false;
-  hasError = false;
-  setExpression();
-  updateDisplay();
+function setSuccessMessage() {
+  const email = emailInput.value.trim();
+  const suffix = rememberInput.checked ? " 로그인 상태가 유지됩니다." : "";
+  formMessage.textContent = `${email} 계정으로 로그인되었습니다.${suffix}`;
+  formMessage.classList.add("is-success");
 }
 
-function setError(message) {
-  displayValue = message;
-  storedValue = null;
-  pendingOperator = null;
-  waitingForOperand = true;
-  hasError = true;
-  setExpression();
-  updateDisplay();
+function clearStatus() {
+  formMessage.textContent = "";
+  formMessage.classList.remove("is-success");
 }
 
-function inputDigit(digit) {
-  if (hasError) {
-    resetCalculator();
-  }
-
-  if (waitingForOperand) {
-    displayValue = digit;
-    waitingForOperand = false;
-    updateDisplay();
-    return;
-  }
-
-  displayValue = displayValue === "0" ? digit : `${displayValue}${digit}`;
-  updateDisplay();
-}
-
-function inputDecimal() {
-  if (hasError) {
-    resetCalculator();
-  }
-
-  if (waitingForOperand) {
-    displayValue = "0.";
-    waitingForOperand = false;
-    displayValueElement.textContent = displayValue;
-    return;
-  }
-
-  if (!displayValue.includes(".")) {
-    displayValue = `${displayValue}.`;
-  }
-
-  displayValueElement.textContent = displayValue;
-}
-
-function deleteDigit() {
-  if (hasError) {
-    resetCalculator();
-    return;
-  }
-
-  if (waitingForOperand) {
-    return;
-  }
-
-  displayValue = displayValue.length > 1 ? displayValue.slice(0, -1) : "0";
-  updateDisplay();
-}
-
-function toggleSign() {
-  if (hasError || displayValue === "0") {
-    return;
-  }
-
-  displayValue = displayValue.startsWith("-")
-    ? displayValue.slice(1)
-    : `-${displayValue}`;
-  updateDisplay();
-}
-
-function performCalculation(firstValue, secondValue, operator) {
-  switch (operator) {
-    case "+":
-      return firstValue + secondValue;
-    case "-":
-      return firstValue - secondValue;
-    case "*":
-      return firstValue * secondValue;
-    case "/":
-      if (secondValue === 0) {
-        throw new Error("0으로 나눌 수 없습니다");
-      }
-      return firstValue / secondValue;
-    default:
-      throw new Error("지원하지 않는 연산입니다");
-  }
-}
-
-function chooseOperator(nextOperator) {
-  if (hasError) {
-    resetCalculator();
-  }
-
-  const inputValue = parseDisplayValue();
-
-  if (pendingOperator && waitingForOperand) {
-    pendingOperator = nextOperator;
-    setExpression(`${formatNumber(storedValue)} ${operatorLabels[nextOperator]}`);
-    return;
-  }
-
-  if (storedValue === null) {
-    storedValue = inputValue;
-  } else if (pendingOperator) {
-    try {
-      storedValue = performCalculation(storedValue, inputValue, pendingOperator);
-    } catch (error) {
-      setError(error.message);
-      return;
-    }
-
-    displayValue = String(storedValue);
-    updateDisplay();
-  }
-
-  pendingOperator = nextOperator;
-  waitingForOperand = true;
-  setExpression(`${formatNumber(storedValue)} ${operatorLabels[nextOperator]}`);
-}
-
-function calculateResult() {
-  if (!pendingOperator || storedValue === null) {
-    return;
-  }
-
-  const inputValue = parseDisplayValue();
-  const expression = `${formatNumber(storedValue)} ${operatorLabels[pendingOperator]} ${formatNumber(inputValue)} =`;
-
-  try {
-    const result = performCalculation(storedValue, inputValue, pendingOperator);
-    displayValue = String(result);
-    storedValue = null;
-    pendingOperator = null;
-    waitingForOperand = true;
-    setExpression(expression);
-    updateDisplay();
-  } catch (error) {
-    setError(error.message);
-  }
-}
-
-function handleButtonPress(button) {
-  const { digit, operator, action } = button.dataset;
-
-  if (digit !== undefined) {
-    inputDigit(digit);
-    return;
-  }
-
-  if (operator) {
-    chooseOperator(operator);
-    return;
-  }
-
-  switch (action) {
-    case "clear":
-      resetCalculator();
-      break;
-    case "delete":
-      deleteDigit();
-      break;
-    case "decimal":
-      inputDecimal();
-      break;
-    case "sign":
-      toggleSign();
-      break;
-    case "equals":
-      calculateResult();
-      break;
-    default:
-      break;
-  }
-}
-
-keypad.addEventListener("click", (event) => {
-  const button = event.target.closest("button");
-
-  if (!button) {
-    return;
-  }
-
-  handleButtonPress(button);
-});
-
-document.addEventListener("keydown", (event) => {
-  if (/^\d$/.test(event.key)) {
-    inputDigit(event.key);
-    return;
-  }
-
-  if (event.key === ".") {
-    inputDecimal();
-    return;
-  }
-
-  if (["+", "-", "*", "/"].includes(event.key)) {
-    event.preventDefault();
-    chooseOperator(event.key);
-    return;
-  }
-
-  if (event.key === "Enter" || event.key === "=") {
-    event.preventDefault();
-    calculateResult();
-    return;
-  }
-
-  if (event.key === "Backspace") {
-    deleteDigit();
-    return;
-  }
-
-  if (event.key === "Escape") {
-    resetCalculator();
+emailInput.addEventListener("input", () => {
+  clearStatus();
+  if (emailInput.getAttribute("aria-invalid") === "true") {
+    validateEmail();
   }
 });
 
-resetCalculator();
+passwordInput.addEventListener("input", () => {
+  clearStatus();
+  if (passwordInput.getAttribute("aria-invalid") === "true") {
+    validatePassword();
+  }
+});
+
+rememberInput.addEventListener("change", clearStatus);
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  clearStatus();
+
+  const isEmailValid = validateEmail();
+  const isPasswordValid = validatePassword();
+
+  if (!isEmailValid) {
+    emailInput.focus();
+    return;
+  }
+
+  if (!isPasswordValid) {
+    passwordInput.focus();
+    return;
+  }
+
+  setSuccessMessage();
+});

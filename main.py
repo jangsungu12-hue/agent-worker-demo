@@ -1,4 +1,4 @@
-"""Serve the login screen app."""
+"""Serve the greeting screen app."""
 
 from __future__ import annotations
 
@@ -8,12 +8,12 @@ from pathlib import Path
 
 
 HOST = "127.0.0.1"
-PORT = 8000
+PORT = 8001
 STATIC_DIR = Path(__file__).resolve().parent
 
 
 class AppHandler(SimpleHTTPRequestHandler):
-    """Serve static files for the login screen."""
+    """Serve static files for the greeting screen."""
 
     def do_GET(self) -> None:  # noqa: N802
         if self.path == "/":
@@ -24,7 +24,7 @@ class AppHandler(SimpleHTTPRequestHandler):
 def main() -> None:
     handler = partial(AppHandler, directory=str(STATIC_DIR))
     server = ThreadingHTTPServer((HOST, PORT), handler)
-    print(f"Serving login screen at http://{HOST}:{PORT}")
+    print(f"Serving greeting screen at http://{HOST}:{PORT}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

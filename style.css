@@ -1,19 +1,11 @@
 :root {
-  --bg: #081018;
-  --surface: #101923;
-  --surface-muted: #162232;
-  --line: #2b3948;
-  --line-strong: #54677c;
-  --text: #f4f7fb;
-  --muted: #aab6c4;
-  --accent: #21b7a9;
-  --accent-dark: #16968b;
-  --accent-soft: rgba(33, 183, 169, 0.14);
-  --danger: #ff9a83;
-  --danger-soft: rgba(255, 154, 131, 0.12);
-  --success: #7ee2a8;
-  --success-soft: rgba(126, 226, 168, 0.12);
-  --shadow: 0 22px 52px rgba(0, 0, 0, 0.38);
+  --bg: #f6f2ea;
+  --surface: #ffffff;
+  --text: #1f2933;
+  --muted: #64748b;
+  --accent: #0f766e;
+  --accent-soft: #d9f0ec;
+  --shadow: 0 22px 56px rgba(31, 41, 51, 0.14);
 }
 
 * {
@@ -23,16 +15,11 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
   color: var(--text);
   background:
-    linear-gradient(145deg, rgba(33, 183, 169, 0.16), rgba(255, 154, 131, 0.08) 42%, rgba(8, 16, 24, 0.94)),
+    linear-gradient(135deg, rgba(15, 118, 110, 0.12), rgba(255, 255, 255, 0) 46%),
     var(--bg);
-}
-
-button,
-input {
-  font: inherit;
 }
 
 .app-shell {
@@ -42,21 +29,22 @@ input {
   padding: 24px;
 }
 
-.login-panel {
-  width: min(100%, 420px);
-  padding: 28px;
-  border: 1px solid var(--line);
+.greeting-panel {
+  width: min(100%, 560px);
+  padding: 48px;
+  border: 1px solid rgba(15, 118, 110, 0.14);
   border-radius: 8px;
   background: var(--surface);
   box-shadow: var(--shadow);
-}
-
-.login-header {
-  margin-bottom: 24px;
+  text-align: center;
 }
 
 .eyebrow {
-  margin: 0 0 8px;
+  display: inline-flex;
+  margin: 0 0 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
   color: var(--accent);
   font-size: 0.78rem;
   font-weight: 800;
@@ -66,149 +54,27 @@ input {
 
 h1 {
   margin: 0;
-  font-size: 2rem;
-  line-height: 1.15;
+  font-size: 5rem;
+  line-height: 1.05;
 }
 
 .subtitle {
-  margin: 8px 0 0;
+  margin: 18px 0 0;
   color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
-.login-form {
-  display: grid;
-  gap: 18px;
-}
-
-.field {
-  display: grid;
-  gap: 8px;
-}
-
-label {
-  font-size: 0.94rem;
-  font-weight: 750;
-}
-
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  min-height: 48px;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface-muted);
-  color: var(--text);
-  transition: background-color 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
-}
-
-input::placeholder {
-  color: #78889a;
-}
-
-input[type="email"]:hover,
-input[type="password"]:hover {
-  border-color: var(--line-strong);
-  background: #1b2a3b;
-}
-
-input[type="email"]:focus,
-input[type="password"]:focus {
-  border-color: var(--accent);
-  background: #1b2a3b;
-  box-shadow: 0 0 0 3px rgba(33, 183, 169, 0.22);
-  outline: none;
-}
-
-input[aria-invalid="true"] {
-  border-color: var(--danger);
-  background: var(--danger-soft);
-}
-
-.field-error {
-  min-height: 18px;
-  margin: 0;
-  color: var(--danger);
-  font-size: 0.84rem;
-  line-height: 1.35;
-}
-
-.form-options {
-  display: flex;
-  align-items: center;
-  color: var(--muted);
-  font-size: 0.92rem;
-}
-
-.checkbox-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted);
-  font-weight: 650;
-}
-
-.checkbox-row input {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: var(--accent);
-}
-
-.submit-button {
-  min-height: 50px;
-  border: 1px solid var(--accent);
-  border-radius: 8px;
-  background: var(--accent);
-  color: #ffffff;
-  font-weight: 800;
-  cursor: pointer;
-  transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.14s ease;
-}
-
-.submit-button:hover {
-  border-color: var(--accent-dark);
-  background: var(--accent-dark);
-}
-
-.submit-button:active {
-  transform: translateY(1px);
-}
-
-.submit-button:focus-visible {
-  outline: 3px solid rgba(8, 120, 111, 0.24);
-  outline-offset: 2px;
-}
-
-.form-message {
-  min-height: 20px;
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.45;
-}
-
-.form-message.is-success {
-  padding: 10px 12px;
-  border: 1px solid rgba(126, 226, 168, 0.22);
-  border-radius: 8px;
-  background: var(--success-soft);
-  color: var(--success);
-  font-weight: 700;
-}
-
-@media (max-width: 420px) {
+@media (max-width: 480px) {
   .app-shell {
-    padding: 14px;
+    padding: 16px;
   }
 
-  .login-panel {
-    padding: 22px;
+  .greeting-panel {
+    padding: 36px 22px;
   }
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 3rem;
   }
 }

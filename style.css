@@ -31,6 +31,10 @@ button {
   font: inherit;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .app-shell {
   display: grid;
   min-height: 100vh;
@@ -38,6 +42,7 @@ button {
   padding: 24px;
 }
 
+.login-panel,
 .calculator {
   width: min(100%, 420px);
   padding: 24px;
@@ -47,8 +52,16 @@ button {
   box-shadow: var(--shadow);
 }
 
+.login-header,
 .calculator-header {
   margin-bottom: 18px;
+}
+
+.calculator-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .eyebrow {
@@ -64,6 +77,95 @@ h1 {
   margin: 0;
   font-size: 1.85rem;
   line-height: 1.15;
+}
+
+.login-form {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.field label {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.field input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-muted);
+  color: var(--text);
+  font: inherit;
+  padding: 0 14px;
+  outline: none;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    background 140ms ease;
+}
+
+.field input:focus {
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.form-error {
+  min-height: 20px;
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.login-button,
+.logout-button {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    transform 140ms ease;
+}
+
+.login-button {
+  min-height: 50px;
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.login-button:hover {
+  background: var(--accent-dark);
+}
+
+.logout-button {
+  min-height: 36px;
+  padding: 0 12px;
+  background: #edf2f7;
+  color: #334155;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.logout-button:hover {
+  border-color: #b8c6d6;
+  background: #f8fafc;
+}
+
+.login-button:active,
+.logout-button:active {
+  transform: translateY(1px);
 }
 
 .display {
@@ -183,6 +285,10 @@ h1 {
 
   .calculator {
     padding: 18px;
+  }
+
+  .calculator-header {
+    gap: 12px;
   }
 
   .key {

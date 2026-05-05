@@ -1,6 +1,6 @@
-# Four Operations Calculator
+# Calculator Login
 
-A small browser calculator for addition, subtraction, multiplication, and division.
+A small browser app with a simple login screen followed by a calculator for addition, subtraction, multiplication, and division.
 
 The expression is shown while buttons are pressed, but the calculated result is not shown until `=` is pressed.
 

@@ -11,12 +11,7 @@ const resultEl = document.querySelector("#result");
 const keypad = document.querySelector(".keypad");
 
 const operators = new Set(["+", "-", "*", "/"]);
-const precedence = {
-  "+": 1,
-  "-": 1,
-  "*": 2,
-  "/": 2,
-};
+const precedence = { "+": 1, "-": 1, "*": 2, "/": 2 };
 
 let tokens = [];
 let currentNumber = "";
@@ -44,9 +39,24 @@ function showLogin() {
   usernameInput.focus();
 }
 
+function countUnclosedParens() {
+  let count = 0;
+  for (const token of tokens) {
+    if (token === "(") count++;
+    if (token === ")") count--;
+  }
+  return count;
+}
+
 function render() {
-  const expression = [...tokens, currentNumber].join(" ");
-  expressionEl.textContent = expression || "0";
+  const parts = currentNumber ? [...tokens, currentNumber] : [...tokens];
+  let display = parts
+    .join(" ")
+    .replace(/\*/g, "×")
+    .replace(/\//g, "÷")
+    .replace(/\( /g, "(")
+    .replace(/ \)/g, ")");
+  expressionEl.textContent = display || "0";
 
   if (!resultShown) {
     resultEl.textContent = "Press =";
@@ -69,6 +79,11 @@ function appendNumber(value) {
     resultShown = false;
     lastResult = "";
     resultEl.classList.remove("error");
+  }
+
+  // Auto-insert × when number immediately follows )
+  if (!currentNumber && tokens.length > 0 && tokens[tokens.length - 1] === ")") {
+    tokens.push("*");
   }
 
   currentNumber = currentNumber === "0" ? value : `${currentNumber}${value}`;
@@ -104,21 +119,64 @@ function appendOperator(operator) {
     currentNumber = "";
   }
 
-  if (!tokens.length) {
+  const lastTok = tokens[tokens.length - 1];
+
+  // Allow unary minus at expression start or right after (
+  if (tokens.length === 0 || lastTok === "(") {
     if (operator === "-") {
       currentNumber = "-";
+      render();
     }
-    render();
     return;
   }
 
-  if (operators.has(tokens[tokens.length - 1])) {
+  if (operators.has(lastTok)) {
     tokens[tokens.length - 1] = operator;
   } else {
     tokens.push(operator);
   }
 
   render();
+}
+
+function appendOpenParen() {
+  if (resultShown) {
+    tokens = [];
+    currentNumber = "";
+    resultShown = false;
+    lastResult = "";
+    resultEl.classList.remove("error");
+  }
+
+  // Auto-insert × when ( follows a completed number or )
+  if (currentNumber) {
+    tokens.push(normalizeNumber(currentNumber));
+    currentNumber = "";
+    tokens.push("*");
+  } else if (tokens.length > 0 && tokens[tokens.length - 1] === ")") {
+    tokens.push("*");
+  }
+
+  tokens.push("(");
+  render();
+}
+
+function appendCloseParen() {
+  if (resultShown) return;
+
+  if (currentNumber) {
+    tokens.push(normalizeNumber(currentNumber));
+    currentNumber = "";
+  }
+
+  const lastTok = tokens[tokens.length - 1];
+  const unclosed = countUnclosedParens();
+
+  // ) is only valid when there is an unclosed ( and last token is a number or )
+  if (unclosed > 0 && lastTok !== undefined && lastTok !== "(" && !operators.has(lastTok)) {
+    tokens.push(")");
+    render();
+  }
 }
 
 function backspace() {
@@ -137,14 +195,8 @@ function backspace() {
 }
 
 function normalizeNumber(value) {
-  if (value === "-") {
-    return "0";
-  }
-
-  if (value.endsWith(".")) {
-    return value.slice(0, -1);
-  }
-
+  if (value === "-") return "0";
+  if (value.endsWith(".")) return value.slice(0, -1);
   return value;
 }
 
@@ -152,21 +204,27 @@ function toPostfix(inputTokens) {
   const output = [];
   const stack = [];
 
-  inputTokens.forEach((token) => {
-    if (!operators.has(token)) {
+  for (const token of inputTokens) {
+    if (token === "(") {
+      stack.push("(");
+    } else if (token === ")") {
+      while (stack.length && stack[stack.length - 1] !== "(") {
+        output.push(stack.pop());
+      }
+      stack.pop();
+    } else if (operators.has(token)) {
+      while (
+        stack.length &&
+        stack[stack.length - 1] !== "(" &&
+        precedence[stack[stack.length - 1]] >= precedence[token]
+      ) {
+        output.push(stack.pop());
+      }
+      stack.push(token);
+    } else {
       output.push(Number(token));
-      return;
     }
-
-    while (
-      stack.length &&
-      precedence[stack[stack.length - 1]] >= precedence[token]
-    ) {
-      output.push(stack.pop());
-    }
-
-    stack.push(token);
-  });
+  }
 
   while (stack.length) {
     output.push(stack.pop());
@@ -178,33 +236,27 @@ function toPostfix(inputTokens) {
 function evaluatePostfix(postfixTokens) {
   const stack = [];
 
-  postfixTokens.forEach((token) => {
+  for (const token of postfixTokens) {
     if (typeof token === "number") {
       stack.push(token);
-      return;
+      continue;
     }
 
     const right = stack.pop();
     const left = stack.pop();
 
-    if (token === "/" && right === 0) {
-      throw new Error("Cannot divide by zero");
-    }
-
+    if (token === "/" && right === 0) throw new Error("0으로 나눌 수 없습니다");
     if (token === "+") stack.push(left + right);
     if (token === "-") stack.push(left - right);
     if (token === "*") stack.push(left * right);
     if (token === "/") stack.push(left / right);
-  });
+  }
 
   return stack[0];
 }
 
 function formatResult(value) {
-  if (!Number.isFinite(value)) {
-    throw new Error("Invalid calculation");
-  }
-
+  if (!Number.isFinite(value)) throw new Error("계산 오류");
   const rounded = Number.parseFloat(value.toPrecision(12));
   return String(rounded);
 }
@@ -215,8 +267,19 @@ function calculate() {
     currentNumber = "";
   }
 
-  if (!tokens.length || operators.has(tokens[tokens.length - 1])) {
-    resultEl.textContent = "Complete expression";
+  const lastTok = tokens[tokens.length - 1];
+
+  if (!tokens.length || operators.has(lastTok) || lastTok === "(") {
+    resultEl.textContent = "식을 완성해 주세요";
+    resultEl.classList.add("error");
+    resultShown = true;
+    lastResult = "";
+    render();
+    return;
+  }
+
+  if (countUnclosedParens() !== 0) {
+    resultEl.textContent = "괄호가 맞지 않습니다";
     resultEl.classList.add("error");
     resultShown = true;
     lastResult = "";
@@ -262,15 +325,10 @@ loginForm.addEventListener("input", () => {
 logoutButton.addEventListener("click", showLogin);
 
 keypad.addEventListener("click", (event) => {
-  if (!isLoggedIn) {
-    return;
-  }
+  if (!isLoggedIn) return;
 
   const button = event.target.closest("button");
-
-  if (!button) {
-    return;
-  }
+  if (!button) return;
 
   if (button.dataset.number) appendNumber(button.dataset.number);
   if (button.dataset.operator) appendOperator(button.dataset.operator);
@@ -278,12 +336,12 @@ keypad.addEventListener("click", (event) => {
   if (button.dataset.action === "clear") clearAll();
   if (button.dataset.action === "backspace") backspace();
   if (button.dataset.action === "equals") calculate();
+  if (button.dataset.action === "open-paren") appendOpenParen();
+  if (button.dataset.action === "close-paren") appendCloseParen();
 });
 
 window.addEventListener("keydown", (event) => {
-  if (!isLoggedIn) {
-    return;
-  }
+  if (!isLoggedIn) return;
 
   const { key } = event;
 
@@ -293,6 +351,8 @@ window.addEventListener("keydown", (event) => {
   if (key === "Enter" || key === "=") calculate();
   if (key === "Backspace") backspace();
   if (key === "Escape") clearAll();
+  if (key === "(") appendOpenParen();
+  if (key === ")") appendCloseParen();
 });
 
 render();

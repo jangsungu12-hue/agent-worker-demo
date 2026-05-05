@@ -9,6 +9,8 @@
   --accent-dark: #1d4ed8;
   --operator: #0f766e;
   --operator-dark: #115e59;
+  --paren: #7c3aed;
+  --paren-dark: #6d28d9;
   --danger: #b91c1c;
   --shadow: 0 24px 64px rgba(17, 24, 39, 0.16);
 }
@@ -263,8 +265,18 @@ h1 {
   background: var(--operator-dark);
 }
 
+.key-paren {
+  border-color: transparent;
+  background: var(--paren);
+  color: #ffffff;
+}
+
+.key-paren:hover {
+  background: var(--paren-dark);
+}
+
 .key-equals {
-  grid-column: span 2;
+  grid-column: span 4;
   border-color: transparent;
   background: var(--accent);
   color: #ffffff;

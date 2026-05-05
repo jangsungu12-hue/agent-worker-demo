@@ -1,85 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Calculator</title>
+  <title>사칙연산 계산기</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app-shell">
-    <section class="panel auth-panel" id="auth-panel">
-      <p class="eyebrow">Demo Access</p>
-      <h1>Login</h1>
-      <p class="description">
-        Sign in with the demo account before using the calculator.
-      </p>
+    <section class="calculator" aria-label="사칙연산 계산기">
+      <header class="calculator-header">
+        <p class="eyebrow">Four Operations</p>
+        <h1>사칙연산 계산기</h1>
+      </header>
 
-      <div class="credential-hint">
-        <p>Test account</p>
-        <code>demo@demo.com / password123</code>
-      </div>
-
-      <form id="login-form" class="stack-form">
-        <label class="field">
-          <span>Email</span>
-          <input id="email" name="email" type="email" autocomplete="username" placeholder="demo@demo.com">
-        </label>
-
-        <label class="field">
-          <span>Password</span>
-          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="password123">
-        </label>
-
-        <button type="submit">Log In</button>
-      </form>
-
-      <p id="auth-message" class="status-message" aria-live="polite"></p>
-    </section>
-
-    <section class="panel app-panel hidden" id="app-panel">
-      <div class="panel-header">
-        <div>
-          <p class="eyebrow">Arithmetic Calculator</p>
-          <h1>Calculator</h1>
-        </div>
-        <button type="button" id="logout-button" class="secondary-button">Log Out</button>
-      </div>
-
-      <p class="description">
-        Enter two numbers and an operator to calculate instantly after login.
-      </p>
-
-      <p id="welcome-message" class="welcome-message"></p>
-
-      <form id="calculator-form" class="stack-form">
-        <label class="field">
-          <span>First number</span>
-          <input id="first-number" name="firstNumber" type="number" step="any" placeholder="e.g. 12">
-        </label>
-
-        <label class="field">
-          <span>Operator</span>
-          <select id="operator" name="operator">
-            <option value="+">Add (+)</option>
-            <option value="-">Subtract (-)</option>
-            <option value="*">Multiply (x)</option>
-            <option value="/">Divide (/)</option>
-          </select>
-        </label>
-
-        <label class="field">
-          <span>Second number</span>
-          <input id="second-number" name="secondNumber" type="number" step="any" placeholder="e.g. 3">
-        </label>
-
-        <button type="submit">Calculate</button>
-      </form>
-
-      <section class="result-box" aria-live="polite">
-        <p class="result-label">Result</p>
-        <p id="result" class="result-value">Enter values to begin.</p>
+      <section class="display" aria-live="polite">
+        <p id="expression" class="expression">&nbsp;</p>
+        <output id="display-value" class="display-value">0</output>
       </section>
+
+      <div class="keypad" aria-label="계산기 키패드">
+        <button type="button" class="key key-muted" data-action="clear">AC</button>
+        <button type="button" class="key key-muted" data-action="delete" aria-label="마지막 숫자 삭제">Del</button>
+        <button type="button" class="key key-muted" data-action="sign" aria-label="부호 변경">+/-</button>
+        <button type="button" class="key key-operator" data-operator="/" aria-label="나누기">/</button>
+
+        <button type="button" class="key" data-digit="7">7</button>
+        <button type="button" class="key" data-digit="8">8</button>
+        <button type="button" class="key" data-digit="9">9</button>
+        <button type="button" class="key key-operator" data-operator="*" aria-label="곱하기">x</button>
+
+        <button type="button" class="key" data-digit="4">4</button>
+        <button type="button" class="key" data-digit="5">5</button>
+        <button type="button" class="key" data-digit="6">6</button>
+        <button type="button" class="key key-operator" data-operator="-" aria-label="빼기">-</button>
+
+        <button type="button" class="key" data-digit="1">1</button>
+        <button type="button" class="key" data-digit="2">2</button>
+        <button type="button" class="key" data-digit="3">3</button>
+        <button type="button" class="key key-operator" data-operator="+" aria-label="더하기">+</button>
+
+        <button type="button" class="key key-wide" data-digit="0">0</button>
+        <button type="button" class="key" data-action="decimal" aria-label="소수점">.</button>
+        <button type="button" class="key key-equals" data-action="equals" aria-label="계산">=</button>
+      </div>
     </section>
   </main>
 

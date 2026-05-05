@@ -1,11 +1,13 @@
-# 안녕하세요 화면
+# Four Operations Calculator
 
-브라우저에 `안녕하세요`가 표시되는 간단한 웹 프로그램입니다.
+A small browser calculator for addition, subtraction, multiplication, and division.
 
-## 실행
+The expression is shown while buttons are pressed, but the calculated result is not shown until `=` is pressed.
+
+## Run
 
 ```powershell
 python main.py
 ```
 
-브라우저에서 `http://127.0.0.1:8001`로 접속합니다.
+Open `http://127.0.0.1:8001` in a browser.

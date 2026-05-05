@@ -130,11 +130,11 @@ function performCalculation(firstValue, secondValue, operator) {
       return firstValue * secondValue;
     case "/":
       if (secondValue === 0) {
-        throw new Error("Cannot divide by zero");
+        throw new Error("0으로 나눌 수 없습니다");
       }
       return firstValue / secondValue;
     default:
-      throw new Error("Unsupported operation");
+      throw new Error("지원하지 않는 연산입니다");
   }
 }
 

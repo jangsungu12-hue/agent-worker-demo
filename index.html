@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arithmetic Calculator</title>
+  <title>사칙연산 계산기</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app-shell">
-    <section class="calculator" aria-label="Arithmetic calculator">
+    <section class="calculator" aria-label="사칙연산 계산기">
       <header class="calculator-header">
         <p class="eyebrow">Four Operations</p>
-        <h1>Calculator</h1>
+        <h1>사칙연산 계산기</h1>
       </header>
 
       <section class="display" aria-live="polite">
@@ -19,30 +19,30 @@
         <output id="display-value" class="display-value">0</output>
       </section>
 
-      <div class="keypad" aria-label="Calculator keypad">
+      <div class="keypad" aria-label="계산기 키패드">
         <button type="button" class="key key-muted" data-action="clear">AC</button>
-        <button type="button" class="key key-muted" data-action="delete" aria-label="Delete last digit">Del</button>
-        <button type="button" class="key key-muted" data-action="sign" aria-label="Toggle sign">+/-</button>
-        <button type="button" class="key key-operator" data-operator="/" aria-label="Divide">/</button>
+        <button type="button" class="key key-muted" data-action="delete" aria-label="마지막 숫자 삭제">Del</button>
+        <button type="button" class="key key-muted" data-action="sign" aria-label="부호 변경">+/-</button>
+        <button type="button" class="key key-operator" data-operator="/" aria-label="나누기">/</button>
 
         <button type="button" class="key" data-digit="7">7</button>
         <button type="button" class="key" data-digit="8">8</button>
         <button type="button" class="key" data-digit="9">9</button>
-        <button type="button" class="key key-operator" data-operator="*" aria-label="Multiply">x</button>
+        <button type="button" class="key key-operator" data-operator="*" aria-label="곱하기">x</button>
 
         <button type="button" class="key" data-digit="4">4</button>
         <button type="button" class="key" data-digit="5">5</button>
         <button type="button" class="key" data-digit="6">6</button>
-        <button type="button" class="key key-operator" data-operator="-" aria-label="Subtract">-</button>
+        <button type="button" class="key key-operator" data-operator="-" aria-label="빼기">-</button>
 
         <button type="button" class="key" data-digit="1">1</button>
         <button type="button" class="key" data-digit="2">2</button>
         <button type="button" class="key" data-digit="3">3</button>
-        <button type="button" class="key key-operator" data-operator="+" aria-label="Add">+</button>
+        <button type="button" class="key key-operator" data-operator="+" aria-label="더하기">+</button>
 
         <button type="button" class="key key-wide" data-digit="0">0</button>
-        <button type="button" class="key" data-action="decimal" aria-label="Decimal point">.</button>
-        <button type="button" class="key key-equals" data-action="equals" aria-label="Equals">=</button>
+        <button type="button" class="key" data-action="decimal" aria-label="소수점">.</button>
+        <button type="button" class="key key-equals" data-action="equals" aria-label="계산">=</button>
       </div>
     </section>
   </main>

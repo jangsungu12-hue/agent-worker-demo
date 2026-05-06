@@ -59,6 +59,11 @@ button {
   box-shadow: var(--shadow);
 }
 
+body:has(#login-screen:not([hidden])) .login-panel {
+  background: var(--login-bg);
+  box-shadow: var(--login-shadow);
+}
+
 .login-header {
   margin-bottom: 18px;
 }

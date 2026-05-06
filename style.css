@@ -13,6 +13,14 @@
   --paren-dark: #6d28d9;
   --danger: #b91c1c;
   --shadow: 0 24px 64px rgba(17, 24, 39, 0.16);
+
+  --login-bg: #000000;
+  --login-surface: #111111;
+  --login-surface-muted: #1a1a1a;
+  --login-text: #f1f5f9;
+  --login-muted: #94a3b8;
+  --login-line: #2d2d2d;
+  --login-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
 }
 
 * {
@@ -27,6 +35,10 @@ body {
   background:
     linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 118, 110, 0.09)),
     var(--bg);
+}
+
+body:has(#login-screen:not([hidden])) {
+  background: var(--login-bg);
 }
 
 button {
@@ -48,10 +60,20 @@ button {
 .calculator {
   width: min(100%, 420px);
   padding: 24px;
-  border: 1px solid rgba(17, 24, 39, 0.08);
   border-radius: 8px;
-  background: var(--surface);
   box-shadow: var(--shadow);
+}
+
+.login-panel {
+  border: 1px solid var(--login-line);
+  background: var(--login-surface);
+  box-shadow: var(--login-shadow);
+  color: var(--login-text);
+}
+
+.calculator {
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  background: var(--surface);
 }
 
 .login-header,
@@ -75,10 +97,18 @@ button {
   text-transform: uppercase;
 }
 
+.login-panel .eyebrow {
+  color: var(--login-muted);
+}
+
 h1 {
   margin: 0;
   font-size: 1.85rem;
   line-height: 1.15;
+}
+
+.login-panel h1 {
+  color: var(--login-text);
 }
 
 .login-form {
@@ -97,6 +127,10 @@ h1 {
   font-weight: 700;
 }
 
+.login-panel .field label {
+  color: var(--login-muted);
+}
+
 .field input {
   width: 100%;
   min-height: 48px;
@@ -113,10 +147,26 @@ h1 {
     background 140ms ease;
 }
 
+.login-panel .field input {
+  border-color: var(--login-line);
+  background: var(--login-surface-muted);
+  color: var(--login-text);
+}
+
+.login-panel .field input::placeholder {
+  color: var(--login-muted);
+}
+
 .field input:focus {
   border-color: var(--accent);
   background: #ffffff;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.login-panel .field input:focus {
+  border-color: var(--accent);
+  background: #1e1e1e;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
 .form-error {

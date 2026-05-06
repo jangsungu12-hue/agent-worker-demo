@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculator Login</title>
+  <title>로그인</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
@@ -12,7 +12,7 @@
     <section id="login-screen" class="login-panel" aria-labelledby="login-title">
       <header class="login-header">
         <p class="eyebrow">Login</p>
-        <h1 id="login-title">계산기 로그인</h1>
+        <h1 id="login-title">로그인</h1>
       </header>
 
       <form id="login-form" class="login-form" novalidate>
@@ -31,49 +31,13 @@
       </form>
     </section>
 
-    <section id="calculator-screen" class="calculator" aria-label="Four function calculator" hidden>
-      <header class="calculator-header">
-        <div>
-          <p class="eyebrow">Calculator</p>
-          <h1 id="app-title">Four operations</h1>
-        </div>
-        <button type="button" id="logout-button" class="logout-button">로그아웃</button>
+    <section id="welcome-screen" class="login-panel" aria-labelledby="welcome-title" hidden>
+      <header class="login-header">
+        <p class="eyebrow">Welcome</p>
+        <h1 id="welcome-title">환영합니다</h1>
       </header>
-
-      <section class="display" aria-live="polite">
-        <div class="display-label">Expression</div>
-        <output id="expression" class="expression" aria-label="Current expression">0</output>
-        <div class="display-label">Result</div>
-        <output id="result" class="result" aria-label="Calculated result">Press =</output>
-      </section>
-
-      <section class="keypad" aria-label="Calculator keys">
-        <button type="button" class="key key-paren" data-action="open-paren">(</button>
-        <button type="button" class="key key-paren" data-action="close-paren">)</button>
-        <button type="button" class="key key-secondary" data-action="clear">C</button>
-        <button type="button" class="key key-secondary" data-action="backspace">DEL</button>
-
-        <button type="button" class="key" data-number="7">7</button>
-        <button type="button" class="key" data-number="8">8</button>
-        <button type="button" class="key" data-number="9">9</button>
-        <button type="button" class="key key-operator" data-operator="/">÷</button>
-
-        <button type="button" class="key" data-number="4">4</button>
-        <button type="button" class="key" data-number="5">5</button>
-        <button type="button" class="key" data-number="6">6</button>
-        <button type="button" class="key key-operator" data-operator="*">×</button>
-
-        <button type="button" class="key" data-number="1">1</button>
-        <button type="button" class="key" data-number="2">2</button>
-        <button type="button" class="key" data-number="3">3</button>
-        <button type="button" class="key key-operator" data-operator="-">−</button>
-
-        <button type="button" class="key key-zero" data-number="0">0</button>
-        <button type="button" class="key" data-action="decimal">.</button>
-        <button type="button" class="key key-operator" data-operator="+">+</button>
-
-        <button type="button" class="key key-equals" data-action="equals">=</button>
-      </section>
+      <p id="welcome-message" class="welcome-message"></p>
+      <button type="button" id="logout-button" class="login-button">로그아웃</button>
     </section>
   </main>
 </body>

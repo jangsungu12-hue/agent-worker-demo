@@ -1,14 +1,14 @@
 :root {
-  --bg: #eef3f7;
-  --surface: #ffffff;
-  --surface-muted: #f6f8fb;
-  --text: #111827;
-  --muted: #637083;
-  --line: #d9e2ec;
-  --accent: #2563eb;
-  --accent-dark: #1d4ed8;
-  --danger: #b91c1c;
-  --shadow: 0 24px 64px rgba(17, 24, 39, 0.16);
+  --bg: #000000;
+  --surface: #111111;
+  --surface-muted: #1a1a1a;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --line: #2d2d2d;
+  --accent: #3b82f6;
+  --accent-dark: #2563eb;
+  --danger: #f87171;
+  --shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
 
   --login-bg: #000000;
   --login-surface: #111111;
@@ -28,9 +28,7 @@ body {
   min-height: 100vh;
   font-family: "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
   color: var(--text);
-  background:
-    linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 118, 110, 0.09)),
-    var(--bg);
+  background: var(--bg);
 }
 
 body:has(#login-screen:not([hidden])) {
@@ -128,6 +126,10 @@ h1 {
     background 140ms ease;
 }
 
+.field input::placeholder {
+  color: var(--muted);
+}
+
 .login-panel .field input {
   border-color: var(--login-line);
   background: var(--login-surface-muted);
@@ -140,8 +142,8 @@ h1 {
 
 .field input:focus {
   border-color: var(--accent);
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  background: #1e1e1e;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
 
 .login-panel .field input:focus {

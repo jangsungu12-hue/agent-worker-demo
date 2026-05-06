@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>로그인</title>
+  <title>계산기</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
@@ -31,13 +31,46 @@
       </form>
     </section>
 
-    <section id="welcome-screen" class="login-panel" aria-labelledby="welcome-title" hidden>
+    <section id="calc-screen" class="calc-panel" aria-labelledby="calc-title" hidden>
       <header class="login-header">
-        <p class="eyebrow">Welcome</p>
-        <h1 id="welcome-title">환영합니다</h1>
+        <p class="eyebrow">Calculator</p>
+        <h1 id="calc-title">계산기</h1>
       </header>
-      <p id="welcome-message" class="welcome-message"></p>
-      <button type="button" id="logout-button" class="login-button">로그아웃</button>
+
+      <div class="calc-display" aria-live="polite" aria-atomic="true">
+        <div class="calc-expr" id="calc-expr"></div>
+        <div class="calc-result" id="calc-result">0</div>
+      </div>
+
+      <div class="calc-grid" role="group" aria-label="계산기 버튼">
+        <button class="calc-btn btn-clear"  data-action="clear">C</button>
+        <button class="calc-btn btn-func"   data-action="backspace">←</button>
+        <button class="calc-btn btn-op"     data-value="/">÷</button>
+
+        <button class="calc-btn btn-paren"  data-value="(">(</button>
+        <button class="calc-btn btn-paren"  data-value=")">)</button>
+        <button class="calc-btn btn-num"    data-value=".">.</button>
+        <button class="calc-btn btn-op"     data-value="*">×</button>
+
+        <button class="calc-btn btn-num"    data-value="7">7</button>
+        <button class="calc-btn btn-num"    data-value="8">8</button>
+        <button class="calc-btn btn-num"    data-value="9">9</button>
+        <button class="calc-btn btn-op"     data-value="-">−</button>
+
+        <button class="calc-btn btn-num"    data-value="4">4</button>
+        <button class="calc-btn btn-num"    data-value="5">5</button>
+        <button class="calc-btn btn-num"    data-value="6">6</button>
+        <button class="calc-btn btn-op"     data-value="+">+</button>
+
+        <button class="calc-btn btn-num"    data-value="1">1</button>
+        <button class="calc-btn btn-num"    data-value="2">2</button>
+        <button class="calc-btn btn-num"    data-value="3">3</button>
+        <button class="calc-btn btn-equals" data-action="equals">=</button>
+
+        <button class="calc-btn btn-num btn-zero" data-value="0">0</button>
+      </div>
+
+      <button type="button" id="logout-button" class="login-button calc-logout">로그아웃</button>
     </section>
   </main>
 </body>

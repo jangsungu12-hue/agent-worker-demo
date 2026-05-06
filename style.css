@@ -189,3 +189,107 @@ h1 {
   font-size: 1rem;
   line-height: 1.5;
 }
+
+/* Calculator */
+.calc-wrapper {
+  min-height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+}
+
+.calc {
+  width: min(100%, 340px);
+  background: #000;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.calc-display {
+  padding: 20px 20px 8px;
+  text-align: right;
+  background: #000;
+}
+
+.calc-expression {
+  min-height: 20px;
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calc-result {
+  display: block;
+  color: #fff;
+  font-size: 3.5rem;
+  font-weight: 300;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calc-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px;
+  background: #000;
+}
+
+.calc-btn {
+  aspect-ratio: 1;
+  background: #333;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 400;
+  transition: filter 80ms ease;
+}
+
+.calc-btn:active {
+  filter: brightness(1.5);
+}
+
+.calc-btn--action {
+  background: #a5a5a5;
+  color: #1c1c1e;
+}
+
+.calc-btn--op {
+  background: #ff9f0a;
+  color: #fff;
+}
+
+.calc-btn--zero {
+  grid-column: span 2;
+  border-radius: 36px;
+  aspect-ratio: auto;
+  text-align: left;
+  padding-left: 26px;
+}
+
+.logout-link {
+  background: none;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #555;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 8px 20px;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+
+.logout-link:hover {
+  border-color: #555;
+  color: #999;
+}

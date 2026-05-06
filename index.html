@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>로그인</title>
+  <title>사칙연산 계산기</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
-  <main class="app-shell" aria-labelledby="login-title">
-    <section id="login-screen" class="login-panel" aria-labelledby="login-title">
+  <main id="login-screen" class="app-shell" aria-labelledby="login-title">
+    <section class="login-panel" aria-labelledby="login-title">
       <header class="login-header">
         <p class="eyebrow">Login</p>
         <h1 id="login-title">로그인</h1>
@@ -30,15 +30,41 @@
         <button type="submit" class="login-button">로그인</button>
       </form>
     </section>
-
-    <section id="welcome-screen" class="login-panel" aria-labelledby="welcome-title" hidden>
-      <header class="login-header">
-        <p class="eyebrow">Welcome</p>
-        <h1 id="welcome-title">환영합니다</h1>
-      </header>
-      <p id="welcome-message" class="welcome-message"></p>
-      <button type="button" id="logout-button" class="login-button">로그아웃</button>
-    </section>
   </main>
+
+  <div id="calculator-screen" class="calc-wrapper" hidden>
+    <div class="calc" role="application" aria-label="사칙연산 계산기">
+      <div class="calc-display">
+        <div class="calc-expression" id="calc-expression" aria-hidden="true"></div>
+        <output class="calc-result" id="calc-result" aria-live="polite" aria-atomic="true">0</output>
+      </div>
+      <div class="calc-buttons">
+        <button class="calc-btn calc-btn--action" data-action="clear">AC</button>
+        <button class="calc-btn calc-btn--action" data-action="sign">+/-</button>
+        <button class="calc-btn calc-btn--action" data-action="percent">%</button>
+        <button class="calc-btn calc-btn--op" data-op="÷">÷</button>
+
+        <button class="calc-btn" data-num="7">7</button>
+        <button class="calc-btn" data-num="8">8</button>
+        <button class="calc-btn" data-num="9">9</button>
+        <button class="calc-btn calc-btn--op" data-op="×">×</button>
+
+        <button class="calc-btn" data-num="4">4</button>
+        <button class="calc-btn" data-num="5">5</button>
+        <button class="calc-btn" data-num="6">6</button>
+        <button class="calc-btn calc-btn--op" data-op="-">-</button>
+
+        <button class="calc-btn" data-num="1">1</button>
+        <button class="calc-btn" data-num="2">2</button>
+        <button class="calc-btn" data-num="3">3</button>
+        <button class="calc-btn calc-btn--op" data-op="+">+</button>
+
+        <button class="calc-btn calc-btn--zero" data-num="0">0</button>
+        <button class="calc-btn" data-action="decimal">.</button>
+        <button class="calc-btn calc-btn--op" data-action="equals">=</button>
+      </div>
+    </div>
+    <button type="button" id="logout-button" class="logout-link">로그아웃</button>
+  </div>
 </body>
 </html>
